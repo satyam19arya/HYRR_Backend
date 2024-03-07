@@ -101,17 +101,13 @@ const deleteMyProfile = async (req, res) => {
         const curUserId = req._id;
         const curUser = await User.findById(curUserId);
 
-        //Delete all posts and remove likes and comments from posts
         const userPosts = await Post.find({ owner: curUserId });
         for (const post of userPosts) {
-            // Remove likes
             post.likes.pull(curUserId);
-            // Remove comments by the user
             post.comments = post.comments.filter(comment => comment.owner.toString() !== curUserId.toString());
             await post.save();
         }
 
-        //Update followers and followings
         const followers = await User.find({ _id: { $in: curUser.followers } });
         const followings = await User.find({ _id: { $in: curUser.followings } });
 
@@ -125,12 +121,10 @@ const deleteMyProfile = async (req, res) => {
             await following.save();
         }
 
-        //Delete profile image from cloudinary
         if (curUser.avatar.publicId) {
             await cloudinary.uploader.destroy(curUser.avatar.publicId);
         }
 
-        //Remove user and clear JWT cookie
         await curUser.remove();
         res.clearCookie('jwt', {
             httpOnly: true,
@@ -200,7 +194,7 @@ const getUserProfile = async (req, res) => {
         const fullPosts = user.posts;
         const posts = fullPosts.map( (item) => mapPostOutput(item, req._id)).reverse();
 
-        return res.send(success(200, {...user._doc, posts}));  //doc -> give only relevant information
+        return res.send(success(200, {...user._doc, posts}));
 
     }catch(e){
         return res.send(error(500, e.message));

@@ -63,7 +63,25 @@ const likeAndUnlikePost = async (req, res) => {
     }
 };
 
+const getAllPosts = async (req, res) => {
+    try{
+        let posts;
+        const { page, limit = 2 } = req.body;
+        if(!page){
+            posts = await Post.find().populate('owner');
+        }
+        else{
+            const offset = (page - 1) * limit;
+            const posts = await Post.find().populate('owner').skip(offset).limit(limit);
+        }
+        return res.send(success(200, {posts: posts.map(post => mapPostOutput(post, req._id))}));
+    }catch(e){
+        return res.send(error(500, e.message));
+    }
+}
+
 module.exports = {
     createPostController,
-    likeAndUnlikePost
+    likeAndUnlikePost,
+    getAllPosts
 }

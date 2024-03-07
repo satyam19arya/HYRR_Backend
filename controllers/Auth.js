@@ -6,6 +6,7 @@ const { error, success } = require('../utils/responseWrapper');
 const otpGenerator = require('otp-generator');
 const mailSender = require('../utils/mailSender');
 const passwordUpdated = require('../utils/templates/passwordUpdate');
+const welcomeEmail = require('../utils/templates/welcome');
 
 const sendOtp = async(req, res) => {
     try{
@@ -83,8 +84,9 @@ const signUp = async(req, res) => {
             name,
             email, 
             password: hashedPassword,
-            avatar: `https://api.dicebear.com/5.x/initials/svg?seed=${name}&background=%23fff&radius=50`
         })
+
+        await mailSender(user.email, 'Welcome to our platform', welcomeEmail(user.name));
 
         return res.send(success(201, user));
 

@@ -23,8 +23,8 @@ const userSchema = mongoose.Schema({
         type: String,
     },
     avatar: {
-        type: String,
-        required: true,
+        publicId: String,
+        url: String
     },
     followers: [
         {
