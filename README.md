@@ -1,0 +1,15 @@
+## Configuration (Env variables)
+### Create a .env file in the root directory with the following env variables
+```
+PORT
+DATABASE
+CLOUDINARY_CLOUD_NAME
+CLOUDINARY_API_KEY
+CLOUDINARY_API_SECRET
+MAIL_HOST
+MAIL_USERNAME
+MAIL_PASSWORD
+CORS_ORIGIN
+ACCESS_TOKEN_PRIVATE_KEY
+REFRESH_TOKEN_PRIVATE_KEY
+```
