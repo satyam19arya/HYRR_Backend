@@ -69,33 +69,6 @@ const getFeedDataController = async (req, res) => {
     }
 };
 
-const getMyPosts = async (req, res) => {
-    try{
-        const curUserId = req._id;
-        const allUserPosts = await Post.find({owner: curUserId}).populate('likes');
-
-        return res.send(success(200, {allUserPosts}));
-
-    }catch(e){
-        return res.send(error(500, e.message));
-    }
-};
-
-const getUserPosts = async (req, res) => {
-    try{
-        const userId = req.body.userId;
-        if(!userId){
-            res.send(error(400, "User not found"));
-        }
-        const allUserPosts = await Post.find({owner: userId}).populate('likes');
-
-        return res.send(success(200, {allUserPosts}));
-
-    }catch(e){
-        return res.send(error(500, e.message));
-    }
-};
-
 const deleteMyProfile = async (req, res) => {
     try {
         const curUserId = req._id;
@@ -138,7 +111,7 @@ const deleteMyProfile = async (req, res) => {
     }
 };
 
-const getMyInfo = async (req, res) => {
+const getMyProfile = async (req, res) => {
     try{
         const curUserId = req._id;
         const user = await User.findById(curUserId);
@@ -204,10 +177,8 @@ const getUserProfile = async (req, res) => {
 module.exports = {
     followOrUnfollowUserController,
     getFeedDataController,
-    getMyPosts,
-    getUserPosts,
     deleteMyProfile,
-    getMyInfo,
+    getMyProfile,
     updateUserProfile,
     getUserProfile
 };
