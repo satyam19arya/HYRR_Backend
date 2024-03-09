@@ -98,6 +98,9 @@ const deleteMyProfile = async (req, res) => {
             await cloudinary.uploader.destroy(curUser.avatar.publicId);
         }
 
+        // Delete user posts
+        await Post.deleteMany({ owner: curUserId });
+
         await curUser.remove();
         res.clearCookie('jwt', {
             httpOnly: true,
